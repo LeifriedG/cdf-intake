@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-from datetime import date, timedelta
+import yaml
+from pathlib import Path
 
 st.header("3. Shift Man-Power", divider="blue")
 st.caption(
@@ -8,16 +9,15 @@ st.caption(
     "Please enter only numbers — no text."
 )
 
-# Date range selection
-col1, col2 = st.columns(2)
-with col1:
-    start_date = st.date_input("Start Date", value=date.today())
-with col2:
-    end_date = st.date_input("End Date", value=date.today() + timedelta(days=13))
+# Load date range from config
+config_path = Path(__file__).parent.parent / "config.yaml"
+with open(config_path) as f:
+    config = yaml.safe_load(f)
 
-if start_date > end_date:
-    st.error("Start date must be before end date.")
-    st.stop()
+start_date = config["manpower"]["start_date"]
+end_date = config["manpower"]["end_date"]
+
+st.info(f"📅 Outage period: **{start_date}** to **{end_date}**")
 
 # Build editable dataframe
 dates = pd.date_range(start=start_date, end=end_date)
