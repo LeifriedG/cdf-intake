@@ -14,8 +14,10 @@ pages = {
         st.Page("pages/3_Man_Power.py", title="3. Man Power", icon="👷"),
         st.Page("pages/4_Equipment.py", title="4. Equipment", icon="🚜"),
         st.Page("pages/5_Chemicals.py", title="5. Chemicals", icon="🧪"),
+        st.Page("pages/6_Submit.py", title="Submit", icon="📨"),
     ],
 }
 
 nav = st.navigation(pages)
 nav.run()
+
