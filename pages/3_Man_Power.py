@@ -3,6 +3,12 @@ import pandas as pd
 import yaml
 from pathlib import Path
 
+# Initialize persistent storage
+if "form_data" not in st.session_state:
+    st.session_state["form_data"] = {}
+if "manpower_data" not in st.session_state:
+    st.session_state["manpower_data"] = None
+
 st.header("3. Shift Man-Power", divider="blue")
 st.caption(
     "Enter the TOTAL man-power loading (workers + supervisors) for each shift. "
@@ -26,9 +32,13 @@ for d in dates:
     rows.append({"Date": d.strftime("%Y-%m-%d"), "Shift": "Day", "Total Workers & Supervisors": 0})
     rows.append({"Date": d.strftime("%Y-%m-%d"), "Shift": "Night", "Total Workers & Supervisors": 0})
 
-df = pd.DataFrame(rows)
+# Use saved data if available, otherwise use blank template
+if st.session_state["manpower_data"] is not None:
+    df = st.session_state["manpower_data"].copy()
+else:
+    df = pd.DataFrame(rows)
 
-st.data_editor(
+edited_df = st.data_editor(
     df,
     column_config={
         "Date": st.column_config.TextColumn("Date", disabled=True),
@@ -44,3 +54,6 @@ st.data_editor(
     hide_index=True,
     key="manpower_editor",
 )
+
+# Persist the edited data
+st.session_state["manpower_data"] = edited_df
