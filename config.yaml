@@ -1,0 +1,6 @@
+# CDF Intake Form Configuration
+# Update these dates before each outage/project period
+
+manpower:
+  start_date: "2026-05-17"
+  end_date: "2026-05-30"
