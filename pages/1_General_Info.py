@@ -22,7 +22,6 @@ col1, col2 = st.columns(2)
 
 with col1:
     fd["main_phone"] = st.text_input("Main Phone Number", value=fd.get("main_phone", ""))
-    fd["main_fax"] = st.text_input("Main Fax Number", value=fd.get("main_fax", ""))
     fd["office_manager"] = st.text_input("Office Manager Name", value=fd.get("office_manager", ""))
     fd["main_email"] = st.text_input("Main/General Email", value=fd.get("main_email", ""))
 
