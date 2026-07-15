@@ -15,7 +15,6 @@ fd = st.session_state["form_data"]
 general_info = {
     "company_name": fd.get("company_name", ""),
     "main_phone": fd.get("main_phone", ""),
-    "main_fax": fd.get("main_fax", ""),
     "office_manager": fd.get("office_manager", ""),
     "main_email": fd.get("main_email", ""),
     "site_supt_name": fd.get("site_supt_name", ""),
