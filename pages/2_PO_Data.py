@@ -1,5 +1,13 @@
 import streamlit as st
 
+# Initialize persistent storage
+if "form_data" not in st.session_state:
+    st.session_state["form_data"] = {}
+if "po_data" not in st.session_state:
+    st.session_state["po_data"] = []
+
+fd = st.session_state["form_data"]
+
 st.header("2. PO Data", divider="blue")
 st.caption(
     "Enter the Purchase Order(s) for the jobs covered by this CDF submission. "
@@ -18,15 +26,22 @@ DEPARTMENTS = [
 ]
 
 # Allow multiple POs
-num_pos = st.number_input("Number of POs to enter", min_value=1, max_value=10, value=1)
+num_pos = st.number_input("Number of POs to enter", min_value=1, max_value=10, value=fd.get("num_pos", 1))
+fd["num_pos"] = num_pos
+
+# Ensure po_data list is big enough
+while len(st.session_state["po_data"]) < int(num_pos):
+    st.session_state["po_data"].append({"po_number": "", "po_description": "", "department": DEPARTMENTS[0]})
 
 for i in range(int(num_pos)):
+    po = st.session_state["po_data"][i]
     with st.container(border=True):
         st.subheader(f"PO #{i + 1}")
         col1, col2, col3 = st.columns([1, 2, 1])
         with col1:
-            st.text_input("PO Number", key=f"po_number_{i}", placeholder="S0XXXXXXXX")
+            po["po_number"] = st.text_input("PO Number", value=po.get("po_number", ""), key=f"po_number_{i}", placeholder="S0XXXXXXXX")
         with col2:
-            st.text_input("PO Description", key=f"po_desc_{i}")
+            po["po_description"] = st.text_input("PO Description", value=po.get("po_description", ""), key=f"po_desc_{i}")
         with col3:
-            st.selectbox("Department", DEPARTMENTS, key=f"po_dept_{i}")
+            dept_idx = DEPARTMENTS.index(po["department"]) if po.get("department") in DEPARTMENTS else 0
+            po["department"] = st.selectbox("Department", DEPARTMENTS, index=dept_idx, key=f"po_dept_{i}")
